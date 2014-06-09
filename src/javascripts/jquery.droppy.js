@@ -56,13 +56,22 @@
         return false;
       };
       
+      $.browser.device = (/android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(navigator.userAgent.toLowerCase()));
+      
       if (options.trigger == 'click') {
         $('> li', this).click(function(evt) {
           if (evt.target == this || evt.target.parentNode == this) {
             show.call(this);
           }
         });
-        $('> li ul, > li li', this).hover(show, function() {});
+        if ($.browser.device) {
+		$('#nav li ul li .has-subnav').removeAttr('href');
+		$('#nav li ul li .has-subnav').click( function () {
+		$(this).siblings('ul').css('display', 'block');
+          });
+        } else {
+		$('> li ul, > li li', this).hover(show, function() {});
+        }
         $('ul, li', this).hover(function() {}, hide);
       } else {
         if (typeof $.fn.hoverIntent == 'function') {
